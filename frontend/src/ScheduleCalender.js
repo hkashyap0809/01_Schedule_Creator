@@ -8,9 +8,9 @@ import {
 } from '@devexpress/dx-react-scheduler-material-ui';
 
 export default (props) => (
-  <Paper>
+  <Paper id='calender'>
     <Scheduler data={props.data}>
-      {/* <ViewState currentDate={props.currentDate} /> */}
+      <ViewState currentDate={props.currentDate} />
       <DayView
         startDayHour={props.startDayHour}
         endDayHour={props.endDayHour}

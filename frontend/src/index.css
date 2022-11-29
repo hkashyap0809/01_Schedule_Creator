@@ -27,6 +27,7 @@ code {
   border: 2px solid white;
   border-radius: 5px;
   border-spacing: 10px;
+  margin-bottom: 15px;
 }
 /* th,
 td {
@@ -73,4 +74,9 @@ td {
 }
 #delete-button-style {
   color: red;
+}
+
+#calender {
+  width : 680px;
+  margin : auto;
 }

@@ -118,7 +118,7 @@ function App() {
       {
         description: '',
         category: 'academics',
-        eventStartTime: '24:00',
+
         duration: 0,
         afterBreak: 0,
       },

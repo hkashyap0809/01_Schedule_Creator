@@ -1,5 +1,4 @@
 import React from 'react';
-import ScheduleCalender from './ScheduleCalender';
 
 export const Schedule = (props) => {
   return (

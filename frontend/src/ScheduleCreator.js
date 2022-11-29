@@ -286,8 +286,8 @@ function giveEndDayHour(inputData) {
 
 function generateForCalender(inputData, eventList) {
   let eventDate = inputData.eventDate;
-  let startTime = inputData.startTime;
-  let endTime = inputData.endTime;
+  // let startTime = inputData.startTime;
+  // let endTime = inputData.endTime;
   // console.log(eventDate);
   // console.log(startTime);
   // console.log(endTime);

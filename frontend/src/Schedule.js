@@ -1,18 +1,12 @@
 import React from 'react';
-import Paper from '@mui/material/Paper';
-import { ViewState } from '@devexpress/dx-react-scheduler';
-import {
-  Scheduler,
-  DayView,
-  Appointments,
-} from '@devexpress/dx-react-scheduler-material-ui';
+import ScheduleCalender from './ScheduleCalender';
 
 export const Schedule = (props) => {
   return (
     <>
       <h2>YOUR {props.category} SCHEDULE</h2>
       <table>
-        <tr>
+        <tr key={-1}>
           <th>Event No.</th>
           <th>Start Time</th>
           <th>End Time</th>
@@ -33,7 +27,6 @@ export const Schedule = (props) => {
           </>
         ))}
       </table>
-      {/* <ScheduleCalender /> */}
     </>
   );
 };

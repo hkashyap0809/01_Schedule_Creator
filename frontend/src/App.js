@@ -1,8 +1,6 @@
+import React from 'react';
 import { useState, useReducer, createContext } from 'react';
 import './App.css';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { ScheduleCreator } from './ScheduleCreator';
 
 export const EventContext = createContext();
@@ -44,9 +42,22 @@ function App() {
   ]);
 
   const setStartTime = (value) => {
+    let hr = value.split(':')[0];
+    let min = Number(value.split(':')[1]);
+    min = Math.ceil(min / 5) * 5;
+    if (min < 10) min = '0' + String(min);
+    else min = String(min);
+    value = hr + ':' + min;
+
     dispatch({ type: 'setStartTime', payload: value });
   };
   const setEndTime = (value) => {
+    let hr = value.split(':')[0];
+    let min = Number(value.split(':')[1]);
+    min = Math.ceil(min / 5) * 5;
+    if (min < 10) min = '0' + String(min);
+    else min = String(min);
+    value = hr + ':' + min;
     dispatch({ type: 'setEndTime', payload: value });
   };
   const setDate = (value) => {
@@ -139,6 +150,7 @@ function App() {
                   placeholder='START TIME'
                   value={eventDetails.startTime}
                   type='time'
+                  step='300'
                   onChange={(e) => setStartTime(e.target.value)}
                 />
               </th>
@@ -153,6 +165,7 @@ function App() {
                   placeholder='END TIME'
                   value={eventDetails.endTime}
                   type='time'
+                  step='300'
                   onChange={(e) => setEndTime(e.target.value)}
                 />
               </th>

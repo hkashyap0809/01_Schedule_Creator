@@ -2,6 +2,7 @@ import React from 'react';
 import { useContext } from 'react';
 import { EventContext } from './App';
 import { Schedule } from './Schedule';
+import ScheduleCalender from './ScheduleCalender';
 
 // GLOBAL VARIABLES
 let timeSlot;
@@ -32,7 +33,8 @@ function compare(a, b) {
 
 function processInput(inputData) {
   let events = inputData.events;
-  if (events.length === 0) return;
+  if (events.length === 0 || events.length === undefined) return;
+
   for (let i = 0; i < events.length; i++) {
     events[i]['duration'] = Math.ceil(Number(events[i].duration) / 5) * 5;
     events[i]['afterBreak'] = Math.ceil(Number(events[i].afterBreak) / 5) * 5;
@@ -269,64 +271,117 @@ function CREATESCHEDULE(inputData) {
   if (others.length > 0)
     finalSchedule.others = createEventSchedule(inputData, others);
   if (cultural.length > 0)
-    finalSchedule.cultural = createEventSchedule(cultural);
+    finalSchedule.cultural = createEventSchedule(inputData, cultural);
 
   // console.log(finalSchedule);
   return finalSchedule;
+}
+function giveStartDayHour(inputData) {
+  return Number(inputData.startTime.split(':')[0]);
+}
+
+function giveEndDayHour(inputData) {
+  return Number(inputData.endTime.split(':')[0]);
+}
+
+function generateForCalender(inputData, eventList) {
+  let eventDate = inputData.eventDate;
+  let startTime = inputData.startTime;
+  let endTime = inputData.endTime;
+  // console.log(eventDate);
+  // console.log(startTime);
+  // console.log(endTime);
+
+  const eventCalenderData = [];
+
+  for (let i = 0; i < eventList.length; i++) {
+    let calenderschedule = {};
+    calenderschedule.startDate = eventDate + 'T' + eventList[i].startTime;
+    calenderschedule.endDate = eventDate + 'T' + eventList[i].endTime;
+    calenderschedule.title = eventList[i].description;
+
+    eventCalenderData.push(calenderschedule);
+  }
+  // console.log(eventCalenderData);
+  return eventCalenderData;
+}
+function giveEventDate(inputData) {
+  return inputData.eventDate;
 }
 
 export const ScheduleCreator = () => {
   const eventDetails = useContext(EventContext);
   let schedule = CREATESCHEDULE(eventDetails);
+  let startDayHour = giveStartDayHour(eventDetails);
+  let endDayHour = giveEndDayHour(eventDetails);
+  let currentDate = giveEventDate(eventDetails);
+
+  let academicsCalender = generateForCalender(eventDetails, schedule.academics);
+  let sportsCalender = generateForCalender(eventDetails, schedule.sports);
+  let culturalCalender = generateForCalender(eventDetails, schedule.cultural);
+  let othersCalender = generateForCalender(eventDetails, schedule.others);
+  let seminarCalender = generateForCalender(eventDetails, schedule.seminar);
 
   return (
     <>
       {schedule.academics.length > 0 && (
-        <Schedule category='ACADEMIC' events={schedule.academics} />
+        <>
+          <Schedule category='ACADEMIC' events={schedule.academics} />
+          <ScheduleCalender
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            currentDate={currentDate}
+            data={academicsCalender}
+          />
+        </>
       )}
       {schedule.sports.length > 0 && (
-        <Schedule category='SPORTS' events={schedule.sports} />
+        <>
+          <Schedule category='SPORTS' events={schedule.sports} />
+          <ScheduleCalender
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            currentDate={currentDate}
+            data={sportsCalender}
+          />
+        </>
       )}
 
       {schedule.cultural.length > 0 && (
-        <Schedule category='CULTURAL' events={schedule.cultural} />
+        <>
+          <Schedule category='CULTURAL' events={schedule.cultural} />
+          <ScheduleCalender
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            currentDate={currentDate}
+            data={culturalCalender}
+          />
+        </>
       )}
 
       {schedule.seminar.length > 0 && (
-        <Schedule category='SEMINAR' events={schedule.seminar} />
+        <>
+          <Schedule category='SEMINAR' events={schedule.seminar} />
+          <ScheduleCalender
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            currentDate={currentDate}
+            data={seminarCalender}
+          />
+        </>
       )}
 
       {schedule.others.length > 0 && (
-        <Schedule category='OTHERS' events={schedule.others} />
+        <>
+          <Schedule category='OTHERS' events={schedule.others} />
+          <ScheduleCalender
+            startDayHour={startDayHour}
+            endDayHour={endDayHour}
+            currentDate={currentDate}
+            data={othersCalender}
+          />
+        </>
       )}
     </>
   );
-  // return (
-  //   <>
-  //     <h2>YOUR SCHEDULE</h2>
-  //     <table>
-  //       <tr>
-  //         <th>Event No.</th>
-  //         <th>Start Time</th>
-  //         <th>End Time</th>
-  //         <th>Description </th>
-  //         <th>Duration</th>
-  //         <th>Category</th>
-  //       </tr>
-  //       {schedule.academic.map((singleEvent, index) => (
-  //         <>
-  //           <tr>
-  //             <th>{index + 1}</th>
-  //             <th>{singleEvent.startTime}</th>
-  //             <th>{singleEvent.endTime}</th>
-  //             <th>{singleEvent.description}</th>
-  //             <th>{singleEvent.duration}</th>
-  //             <th>{singleEvent.category}</th>
-  //           </tr>
-  //         </>
-  //       ))}
-  //     </table>
-  //     {/* {JSON.stringify(schedule)} */}
-  //   </>
-  // );
 };

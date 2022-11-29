@@ -10,11 +10,13 @@ To run it
 
 ```
 Clone the repository
-npm init
+cd frontend
+npm install
 npm start
 ```
 
-Node Package
+Node Package Link
+Please follow the procedure mentioned on the below link to create generate the schedule
 
 ```
 https://www.npmjs.com/package/schedule-creator-iiith

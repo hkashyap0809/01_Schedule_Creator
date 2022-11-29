@@ -1,39 +1,73 @@
-import { useState } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import { useState, useReducer, createContext } from 'react';
 import './App.css';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { ScheduleCreator } from './ScheduleCreator';
+
+export const EventContext = createContext();
+
+const initialState = {
+  startTime: '00:00',
+  endTime: '23:00',
+  eventDate: new Date().toISOString().slice(0, 10),
+  // lunchbreak: true,
+  // durationOfLunchBreak: 50,
+  events: [],
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'setStartTime':
+      return { ...state, startTime: action.payload };
+    case 'setEndTime':
+      return { ...state, endTime: action.payload };
+    case 'setEventDate':
+      return { ...state, eventDate: action.payload };
+    case 'updateEvents':
+      return { ...state, events: action.payload };
+    default:
+      return state;
+  }
+};
 
 function App() {
+  const [eventDetails, dispatch] = useReducer(reducer, initialState);
   const [eventList, setEventList] = useState([
-    { description: '', category: '', eventStartTime: '', duration: '' },
+    {
+      description: '',
+      category: 'academics',
+      eventStartTime: '24:00',
+      duration: 0,
+      afterBreak: 0,
+    },
   ]);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [noOfBreaks, setNoOfBreaks] = useState('');
-  const [durationOfBreaks, setDurationOfBreaks] = useState('');
-  const [durationOfLunchBreak, setDurationOfLunchBreak] = useState('');
-  const [lunchBreak, setLunchBreak] = useState(false);
 
-  const handleEventChange = (e, index) => {
-    const { name, value, description } = e.target;
-    console.log(e.target.value);
-    console.log(description);
-    const list = [...eventList];
-    list[index][name] = value;
-    setEventList(list);
+  const setStartTime = (value) => {
+    dispatch({ type: 'setStartTime', payload: value });
   };
+  const setEndTime = (value) => {
+    dispatch({ type: 'setEndTime', payload: value });
+  };
+  const setDate = (value) => {
+    dispatch({ type: 'setEventDate', payload: value });
+  };
+
+  // const handleEventChange = (e, index) => {
+  //   const { name, value, description } = e.target;
+  //   const list = [...eventList];
+  //   list[index][name] = value;
+  //   setEventList(list);
+  // };
 
   const handleEventDescriptionChange = (e, index) => {
     const { name, value } = e.target;
-    console.log(name + ' ' + value + ' ' + index);
     const list = [...eventList];
     list[index][name] = value;
     setEventList(list);
   };
   const handleEventCategoryChange = (e, index) => {
     const { name, value } = e.target;
-    console.log(name + ' ' + value + ' ' + index);
     const list = [...eventList];
     list[index][name] = value;
     setEventList(list);
@@ -41,7 +75,6 @@ function App() {
 
   const handleEventDurationChange = (e, index) => {
     const { name, value } = e.target;
-    console.log(name + ' ' + value + ' ' + index);
     const list = [...eventList];
     list[index][name] = value;
     setEventList(list);
@@ -49,7 +82,13 @@ function App() {
 
   const handleEventStartTimeChange = (e, index) => {
     const { name, value } = e.target;
-    console.log(name + ' ' + value + ' ' + index);
+    const list = [...eventList];
+    list[index][name] = value;
+    setEventList(list);
+  };
+
+  const handleAfterBreakChange = (e, index) => {
+    const { name, value } = e.target;
     const list = [...eventList];
     list[index][name] = value;
     setEventList(list);
@@ -59,172 +98,191 @@ function App() {
     const list = [...eventList];
     list.splice(index, 1);
     setEventList(list);
+    dispatch({ type: 'updateEvents', payload: list });
   };
 
   const handleEventAdd = () => {
-    setEventList([
+    let updatedEventsList = [
       ...eventList,
-      { description: '', category: '', eventStartTime: '', duration: '' },
-    ]);
+      {
+        description: '',
+        category: 'academics',
+        eventStartTime: '24:00',
+        duration: 0,
+        afterBreak: 0,
+      },
+    ];
+    setEventList(updatedEventsList);
+    dispatch({ type: 'updateEvents', payload: updatedEventsList });
   };
 
+  // const generateSchedule = (e) => {
+  //   e.preventDefault();
+  //   console.log(eventDetails);
+  //   console.log('generate schedule');
+  //   setScheduleCreated(true);
+  // };
+
   return (
-    <form className='App' autoComplete='off'>
-      <h1> SCHEDULE CREATOR</h1>
-      <div className='form-field'>
-        <label htmlFor='startTime'>START TIME : </label>
-        <input
-          name='startTime'
-          placeholder='START TIME'
-          value={startTime}
-          type='time'
-          onChange={(e) => setStartTime(e.target.value)}
-        />
-        <br />
-        <label htmlFor='endTime'>END TIME : </label>
-        <input
-          name='endTime'
-          placeholder='END TIME'
-          value={endTime}
-          type='time'
-          onChange={(e) => setEndTime(e.target.value)}
-        />{' '}
-        <br />
-        <label htmlFor='eventDate'>EVENT DATE : </label>
-        <input
-          name='date'
-          placeholder='DATE'
-          value={eventDate}
-          type='date'
-          onChange={(e) => setEventDate(e.target.value)}
-        />{' '}
-        <br />
-        <label htmlFor='noOfBreaks'>NO OF BREAKS : </label>
-        <input
-          name='noOfBreaks'
-          placeholder='NO OF BREAKS'
-          value={noOfBreaks}
-          type='number'
-          onChange={(e) => setNoOfBreaks(e.target.value)}
-        />{' '}
-        <br />
-        <label htmlFor='durationOfBreaks'>DURATION OF BREAKS : </label>
-        <input
-          name='durationOfBreaks'
-          placeholder='DURATION OF BREAK'
-          value={durationOfBreaks}
-          type='number'
-          min='0'
-          onChange={(e) => setDurationOfBreaks(e.target.value)}
-        />
-        <br />
-        <label>LUNCH BREAK : </label>
-        <input
-          type='checkbox'
-          name='lunchBreak'
-          placeholder='LUNCH BREAK'
-          value={lunchBreak}
-          checked={lunchBreak}
-          onChange={(e) => setLunchBreak(e.target.value)}
-        />
-        <br />
-        <label htmlFor='durationOfLunchBreak'>DURATION OF LUNCH BREAK : </label>
-        <input
-          name='durationOfLunchBreak'
-          placeholder='DURATION OF LUNCH BREAK'
-          value={durationOfLunchBreak}
-          type='number'
-          min='0'
-          onChange={(e) => setDurationOfLunchBreak(e.target.value)}
-        />
-        <br /> <br />
-        <label htmlFor='events'>EVENT DETAILS</label>
-        {eventList.map((singleEvent, index) => (
-          <div key={index} className='events'>
-            <span className='first-division'>
-              <a style={{ marginLeft: '5px' }}> </a>
-              <label>Description </label>
-              <input
-                name='description'
-                type='text'
-                id='description'
-                placeholder='DESCRIPTION'
-                value={singleEvent.description}
-                onChange={(e) => handleEventDescriptionChange(e, index)}
-                required
-              />
-              <a style={{ marginLeft: '5px' }}> </a>
-              <label>Category </label>
-              <select
-                name='category'
-                value={singleEvent.category}
-                onChange={(e) => handleEventCategoryChange(e, index)}
-              >
-                <option value='academics'>Academics</option>
-                <option value='sports'>Sports</option>
-                <option value='cultural'>Cultural</option>
-                <option value='seminar'>Seminar</option>
-                <option value='others'>Others</option>
-              </select>
-              <a style={{ marginLeft: '5px' }}> </a>
-              <label>Start time (optional)</label>
-              <input
-                name='eventStartTime'
-                type='time'
-                id='eventStartTime'
-                value={singleEvent.eventStartTime}
-                placeholder='START TIME'
-                onChange={(e) => handleEventStartTimeChange(e, index)}
-                required
-              />
-              <a style={{ marginLeft: '5px' }}> </a>
-              <label>Duration(optional) </label>
-              <input
-                name='duration'
-                type='number'
-                id='duration'
-                min='0'
-                value={singleEvent.duration}
-                placeholder='DURATION (in minutes)'
-                onChange={(e) => handleEventDurationChange(e, index)}
-                required
-              />
-            </span>
-            <span style={{ marginLeft: '10px' }}> </span>
-            <span className='second-division'>
-              {eventList.length !== 1 && (
-                <button
-                  type='button'
-                  onClick={() => handleEventRemove(index)}
-                  className='remove-btn'
-                >
-                  <span>Remove</span>
-                </button>
-              )}
-              <br />
-              {eventList.length - 1 === index && eventList.length < 10 && (
-                <button
-                  type='button'
-                  onClick={handleEventAdd}
-                  className='add-btn'
-                >
-                  <span>Add an Event</span>
-                </button>
-              )}
-            </span>
-          </div>
-        ))}
-      </div>
-      {/* <div className='output'>
-        <h2>Output</h2>
-        {serviceList &&
-          serviceList.map((singleService, index) => (
-            <ul key={index}>
-              {singleService.service && <li>{singleService.service}</li>}
-            </ul>
-          ))}
-      </div> */}
-    </form>
+    <EventContext.Provider value={eventDetails}>
+      <h1 id='schedule-creator'> SCHEDULE CREATOR</h1>
+      <form className='App' autoComplete='off'>
+        <div className='form-field'>
+          <table>
+            <tr>
+              <th>
+                <label htmlFor='startTime'>START TIME : </label>
+              </th>
+              <th>
+                <input
+                  name='startTime'
+                  placeholder='START TIME'
+                  value={eventDetails.startTime}
+                  type='time'
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <label htmlFor='endTime'>END TIME : </label>
+              </th>
+              <th>
+                <input
+                  name='endTime'
+                  placeholder='END TIME'
+                  value={eventDetails.endTime}
+                  type='time'
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              </th>
+            </tr>
+            <tr>
+              <th>
+                <label htmlFor='eventDate'>EVENT DATE : </label>
+              </th>
+              <th>
+                <input
+                  name='date'
+                  placeholder='DATE'
+                  value={eventDetails.eventDate}
+                  type='date'
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </th>
+            </tr>
+          </table>
+          <br /> <br />
+          <h2 id='event-details'> EVENT DETAILS</h2>
+          <table>
+            <tr>
+              <th>Event No.</th>
+              <th>Event Description</th>
+              <th>Event Category</th>
+              <th>Start Time (optional)</th>
+              <th>Duration (in min)</th>
+              <th>After Event Break (in min)</th>
+            </tr>
+            {eventList.map((singleEvent, index) => (
+              <>
+                <tr key={index}>
+                  <th>{index + 1}</th>
+                  <th>
+                    <input
+                      name='description'
+                      type='text'
+                      id='description'
+                      placeholder='DESCRIPTION'
+                      value={singleEvent.description}
+                      onChange={(e) => handleEventDescriptionChange(e, index)}
+                      required
+                    />
+                  </th>
+
+                  <th>
+                    <select
+                      name='category'
+                      value={singleEvent.category}
+                      onChange={(e) => handleEventCategoryChange(e, index)}
+                    >
+                      <option value='academics'>Academics</option>
+                      <option value='sports'>Sports</option>
+                      <option value='cultural'>Cultural</option>
+                      <option value='seminar'>Seminar</option>
+                      <option value='others'>Others</option>
+                    </select>
+                  </th>
+
+                  <th>
+                    <input
+                      name='eventStartTime'
+                      type='time'
+                      id='eventStartTime'
+                      value={singleEvent.eventStartTime}
+                      placeholder='START TIME'
+                      onChange={(e) => handleEventStartTimeChange(e, index)}
+                    />
+                  </th>
+
+                  <th>
+                    <input
+                      name='duration'
+                      type='number'
+                      id='duration'
+                      min='0'
+                      value={singleEvent.duration}
+                      placeholder='DURATION (in minutes)'
+                      onChange={(e) => handleEventDurationChange(e, index)}
+                      required
+                    />
+                  </th>
+                  <th>
+                    <input
+                      name='afterBreak'
+                      type='number'
+                      id='afterBreak'
+                      min='0'
+                      step='5'
+                      value={singleEvent.afterBreak}
+                      placeholder='after break (in minutes)'
+                      onChange={(e) => handleAfterBreakChange(e, index)}
+                      required
+                    />
+                  </th>
+                  <th>
+                    <span className='second-division'>
+                      {eventList.length !== 1 && (
+                        <button
+                          type='button'
+                          onClick={() => handleEventRemove(index)}
+                          className='remove-btn'
+                        >
+                          <i className='fa fa-trash' aria-hidden='true'></i>
+                        </button>
+                      )}
+                    </span>
+                  </th>
+                </tr>
+                <tr>
+                  <div>
+                    {eventList.length - 1 === index && eventList.length < 30 && (
+                      <button
+                        type='button'
+                        onClick={handleEventAdd}
+                        className='add-btn'
+                      >
+                        <i className='fa fa-plus fa-2x' aria-hidden='true'></i>
+                      </button>
+                    )}
+                  </div>
+                </tr>
+              </>
+            ))}
+          </table>
+        </div>
+      </form>
+      <ScheduleCreator />
+    </EventContext.Provider>
   );
 }
 

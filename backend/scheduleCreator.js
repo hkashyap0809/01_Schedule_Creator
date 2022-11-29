@@ -352,103 +352,35 @@ function createEventSchedule(eventList) {
     finalSchedule.push(newSchedule);
   }
 
-  // console.log(finalSchedule);
-  return finalSchedule;
+  let finalScheduleWithBreak = [];
+  for (let i = 0; i < finalSchedule.length; i++) {
+    if (finalSchedule[i].afterBreak === 0) {
+      finalScheduleWithBreak.push(finalSchedule[i]);
+    } else {
+      let newEvent = {};
+      let newBreak = {};
+
+      newEvent.startTime = finalSchedule[i].startTime;
+      let newEndTimeIndex =
+        timeSlot.indexOf(finalSchedule[i].endTime) -
+        finalSchedule[i].afterBreak / 5;
+
+      newEvent.endTime = timeSlot[newEndTimeIndex];
+      newEvent.description = finalSchedule[i].description;
+      newEvent.duration = finalSchedule[i].duration;
+      newEvent.category = finalSchedule[i].category;
+
+      newBreak.startTime = timeSlot[newEndTimeIndex];
+      newBreak.endTime = finalSchedule[i].endTime;
+      newBreak.description = finalSchedule[i].description + ' -  break';
+      newBreak.duration = finalSchedule[i].afterBreak;
+      newBreak.category = 'break';
+
+      finalScheduleWithBreak.push(newEvent);
+      finalScheduleWithBreak.push(newBreak);
+    }
+  }
+
+  finalScheduleWithBreak.sort(compare);
+  return finalScheduleWithBreak;
 }
-
-// createschedule(academic);
-// createschedule(sports);
-
-// // building academic schedule
-// console.log(academic);
-// let academicSchedule = new Array(slots).fill(-1);
-
-// // lunch break
-// if (inputData.lunchBreak) {
-//   let lunchStartIdx = timeSlot.indexOf(inputData.lunchStartime);
-//   let lunchEndIdx = lunchStartIdx + inputData.durationOfLunchBreak / 5;
-//   for (let i = lunchStartIdx; i < lunchEndIdx; i++) {
-//     academicSchedule[i] = 100;
-//   }
-// }
-
-// for (let i = 0; i < academic.length; i++) {
-//   let startIdx = timeSlot.indexOf(academic[i].eventStartTime);
-//   let occupyIdx = academic[i].duration / 5;
-//   let endIdx = startIdx + occupyIdx;
-//   console.log('i :' + i);
-//   console.log('startIdx : ' + startIdx);
-//   console.log('occupyIdx : ' + occupyIdx);
-//   console.log('endIdx : ' + endIdx);
-//   console.log('starTime : ' + academic[i].eventStartTime);
-//   console.log('duration : ' + academic[i].duration);
-
-//   if (startIdx == -1) {
-//     // star Time is not mentioned
-//     // check for empty slots
-//     startIdx = academicSchedule.indexOf(-1);
-//     let emptySlot = academicSchedule.slice(startIdx, endIdx);
-//     let checkStartPos = endIdx;
-//     while (!allEqual(emptySlot, -1)) {
-//       startIdx = academicSchedule.indexOf(-1, checkStartPos);
-//       endIdx = startIdx + occupyIdx;
-//       emptySlot = academicSchedule.slice(startIdx, endIdx);
-//     }
-//     console.log('final start Idx : ' + startIdx);
-//     console.log('final end Idx : ' + endIdx);
-//     for (let j = startIdx; j < endIdx; j++) {
-//       academicSchedule[j] = i;
-//     }
-//   } else {
-//     // start Time is mentioned
-//     let emptySlot = academicSchedule.slice(startIdx, startIdx + occupyIdx);
-//     let checkStartPos = endIdx;
-//     while (!allEqual(emptySlot, -1)) {
-//       startIdx = academicSchedule.indexOf(-1, checkStartPos);
-//       endIdx = startIdx + occupyIdx;
-//       emptySlot = academicSchedule.indexOf(startIdx, endIdx);
-//     }
-//     console.log('final start Idx : ' + startIdx);
-//     console.log('final end Idx : ' + endIdx);
-//     for (let j = startIdx; j < startIdx + occupyIdx; j++) {
-//       academicSchedule[j] = i;
-//     }
-//   }
-// }
-
-// for (let i = 0; i < slots; i++) {
-//   console.log('i : ' + i + '|  ' + timeSlot[i] + ' : ' + academicSchedule[i]);
-// }
-
-// academedicObj = [];
-// let idx = 0;
-// for (let i = 0; i < slots; i++) {
-//   if (academicSchedule[idx] != academicSchedule[i]) {
-//     arr = [];
-//     arr.push(academicSchedule[idx]);
-//     arr.push(timeSlot[idx]);
-//     arr.push(timeSlot[i]);
-//     academedicObj.push(arr);
-//     idx = i;
-//   }
-// }
-// console.log(academedicObj);
-// console.log(academedicObj.length);
-
-// let finalAcademicSchedule = [];
-// for (let i = 0; i < academedicObj.length; i++) {
-//   if (academedicObj[i][0] == -1 || academedicObj[i][0] == 100) continue;
-//   let newSchedule = {};
-//   newSchedule.startTime = academedicObj[i][1];
-//   newSchedule.endTime = academedicObj[i][2];
-//   // console.log(academic[academedicObj[i][0]]);
-//   // console.log(academedicObj[i][0]);
-//   newSchedule.description = academic[academedicObj[i][0]].description;
-//   newSchedule.category = academic[academedicObj[i][0]].category;
-//   newSchedule.duration = academic[academedicObj[i][0]].duration;
-//   finalAcademicSchedule.push(newSchedule);
-// }
-
-// console.log(finalAcademicSchedule);
-
-// functions

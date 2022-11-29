@@ -1,4 +1,11 @@
 import React from 'react';
+import Paper from '@mui/material/Paper';
+import { ViewState } from '@devexpress/dx-react-scheduler';
+import {
+  Scheduler,
+  DayView,
+  Appointments,
+} from '@devexpress/dx-react-scheduler-material-ui';
 
 export const Schedule = (props) => {
   return (
@@ -26,6 +33,7 @@ export const Schedule = (props) => {
           </>
         ))}
       </table>
+      {/* <ScheduleCalender /> */}
     </>
   );
 };

@@ -4,8 +4,8 @@ import ScheduleCalender from './ScheduleCalender';
 export const Schedule = (props) => {
   return (
     <>
-      <h2>YOUR {props.category} SCHEDULE</h2>
-      <table>
+      <h2 id='your-schedule'>YOUR {props.category} SCHEDULE</h2>
+      <table id='table-styling'>
         <tr key={-1}>
           <th>Event No.</th>
           <th>Start Time</th>

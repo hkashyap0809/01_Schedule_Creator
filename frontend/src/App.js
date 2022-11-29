@@ -139,55 +139,49 @@ function App() {
       <h1 id='schedule-creator'> SCHEDULE CREATOR</h1>
       <form className='App' autoComplete='off'>
         <div className='form-field'>
-          <table>
-            <tr>
-              <th>
-                <label htmlFor='startTime'>START TIME : </label>
-              </th>
-              <th>
-                <input
-                  name='startTime'
-                  placeholder='START TIME'
-                  value={eventDetails.startTime}
-                  type='time'
-                  step='300'
-                  onChange={(e) => setStartTime(e.target.value)}
-                />
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <label htmlFor='endTime'>END TIME : </label>
-              </th>
-              <th>
-                <input
-                  name='endTime'
-                  placeholder='END TIME'
-                  value={eventDetails.endTime}
-                  type='time'
-                  step='300'
-                  onChange={(e) => setEndTime(e.target.value)}
-                />
-              </th>
-            </tr>
-            <tr>
-              <th>
-                <label htmlFor='eventDate'>EVENT DATE : </label>
-              </th>
-              <th>
-                <input
-                  name='date'
-                  placeholder='DATE'
-                  value={eventDetails.eventDate}
-                  type='date'
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </th>
-            </tr>
+          <table id='schedule-creator-table'>
+            <th>
+              <label htmlFor='startTime'>START TIME : </label>
+            </th>
+            <th>
+              <input
+                name='startTime'
+                placeholder='START TIME'
+                value={eventDetails.startTime}
+                type='time'
+                step='300'
+                onChange={(e) => setStartTime(e.target.value)}
+              />
+            </th>
+            <th>
+              <label htmlFor='endTime'>END TIME : </label>
+            </th>
+            <th>
+              <input
+                name='endTime'
+                placeholder='END TIME'
+                value={eventDetails.endTime}
+                type='time'
+                step='300'
+                onChange={(e) => setEndTime(e.target.value)}
+              />
+            </th>
+            <th>
+              <label htmlFor='eventDate'>EVENT DATE : </label>
+            </th>
+            <th>
+              <input
+                name='date'
+                placeholder='DATE'
+                value={eventDetails.eventDate}
+                type='date'
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </th>
           </table>
           <br /> <br />
           <h2 id='event-details'> EVENT DETAILS</h2>
-          <table>
+          <table id='schedule-creator-table'>
             <tr>
               <th>Event No.</th>
               <th>Event Description</th>
@@ -270,7 +264,11 @@ function App() {
                           onClick={() => handleEventRemove(index)}
                           className='remove-btn'
                         >
-                          <i className='fa fa-trash' aria-hidden='true'></i>
+                          <i
+                            id='delete-button-style'
+                            className='fa fa-trash'
+                            aria-hidden='true'
+                          ></i>
                         </button>
                       )}
                     </span>
@@ -284,7 +282,11 @@ function App() {
                         onClick={handleEventAdd}
                         className='add-btn'
                       >
-                        <i className='fa fa-plus fa-2x' aria-hidden='true'></i>
+                        <i
+                          id='add-button-style'
+                          className='fa fa-plus fa-2x'
+                          aria-hidden='true'
+                        ></i>
                       </button>
                     )}
                   </div>

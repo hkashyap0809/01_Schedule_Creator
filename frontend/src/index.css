@@ -1,18 +1,76 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+  color: white;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-
-#schedule-creator,#event-details{
+#schedule-creator,
+#event-details {
   text-align: center;
+}
+
+#your-schedule {
+  text-align: center;
+}
+#table-styling {
+  margin: auto;
+  border: 2px solid white;
+  border-radius: 5px;
+  border-spacing: 10px;
+}
+/* th,
+td {
+  padding: 5px;
+} */
+
+/* td:nth-child(even),
+th:nth-child(even) {
+  background-color: #d6eeee;
+} */
+tr {
+  border-bottom: 1px solid #ddd;
+}
+/* #table-styling, */
+th,
+td {
+  padding: 10px;
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+input {
+  border: 2px solid white;
+  display: inline-block;
+}
+/* table,
+th,
+td {
+    border: 1px solid black;  
+    border-radius: 5px;  
+} */
+#schedule-creator-table {
+  margin: auto;
+}
+th,
+td {
+  border: 1px solid white;
+  /* border-radius: 5px; */
+}
+/* i {
+  color: red;
+} */
+#add-button-style {
+  color: green;
+}
+#delete-button-style {
+  color: red;
 }

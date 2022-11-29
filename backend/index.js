@@ -2,126 +2,146 @@ let inputData = {
   startTime: '09:00',
   endTime: '23:30',
   date: '2022-10-27',
+  noOfBreaks: 4,
+  durationOfBreak: 5,
   lunchBreak: true,
-  lunchStartime: '12:30',
   durationOfLunchBreak: 50,
   events: [
     {
       description: 'theory of mechanics',
       category: 'academic',
       eventStartTime: '17:00',
-      duration: 60,
-      afterBreak: 15,
+      duration: 260,
     },
     {
       description: 'Hockey',
       category: 'sports',
-      eventStartTime: '23:59',
+      eventStartTime: '14:00',
       duration: 100,
-      afterBreak: 0,
     },
     {
       description: 'Seminar by Jay black',
       category: 'seminar',
-      eventStartTime: '13:20',
+      eventStartTime: '13:00',
       duration: 60,
-      afterBreak: 15,
     },
     {
       description: 'High Tea',
       category: 'others',
       eventStartTime: '16:00',
       duration: 25,
-      afterBreak: 15,
     },
     {
       description: 'Cult Night',
       category: 'cultural',
       eventStartTime: '21:00',
       duration: 180,
-      afterBreak: 15,
     },
     {
       description: 'Automata Theory',
       category: 'academic',
-      eventStartTime: '23:59',
+      eventStartTime: '13:00',
       duration: 60,
-      afterBreak: 0,
     },
     {
       description: 'Cricket',
       category: 'sports',
-      eventStartTime: '14:00',
+      eventStartTime: '12:00',
       duration: 120,
-      afterBreak: 15,
     },
     {
       description: 'Seminar by frank',
       category: 'seminar',
       eventStartTime: '11:00',
       duration: 60,
-      afterBreak: 15,
     },
     {
       description: 'Open House Discussion',
       category: 'other',
       eventStartTime: '10:00',
       duration: 90,
-      afterBreak: 0,
     },
     {
       description: 'Rangoli',
       category: 'cultural',
       eventStartTime: '09:00',
       duration: 30,
-      afterBreak: 15,
     },
     {
       description: 'Design thinking',
       category: 'academic',
       eventStartTime: '10:00',
       duration: 60,
-      afterBreak: 15,
     },
     {
       description: 'Pattern thinking',
       category: 'academic',
-      eventStartTime: '23:59',
-      duration: 80,
-      afterBreak: 15,
+      eventStartTime: '17:00',
+      duration: 160,
     },
     {
       description: 'Night Cricket',
       category: 'sports',
-      eventStartTime: '10:00',
+      eventStartTime: '12:00',
       duration: 60,
-      afterBreak: 15,
     },
     {
       description: 'Tradition dress Ramp Walk',
       category: 'cultural',
       eventStartTime: '15:30',
       duration: 30,
-      afterBreak: 15,
     },
+
     {
       description: 'Seminar on Simple science',
       category: 'seminar',
       eventStartTime: '20:00',
       duration: 60,
-      afterBreak: 15,
     },
   ],
 };
 
-// GLOBAL VARIABLES
-let timeSlot;
+console.log(inputData);
+console.log(inputData.startTime);
+starTimeHour = parseInt(inputData.startTime.split(':')[0]);
+endTimeHour = parseInt(inputData.endTime.split(':')[0]);
 
-// UTILITY FUNCTIONS
-// all values are equal or not
-const allEqual = (arr, val) => arr.every((v) => v === val);
+starTimeMin = parseInt(inputData.startTime.split(':')[1]);
+endTimeMin = parseInt(inputData.endTime.split(':')[1]);
 
-// event comparator
+totaHours = (endTimeHour - starTimeHour) * 60;
+totalMin = endTimeMin - starTimeMin;
+totalTime = totaHours + totalMin;
+
+slots = totalTime / inputData.durationOfBreak;
+console.log(totalTime);
+console.log(slots);
+console.log('Yeah');
+console.log(inputData.events[0].category);
+
+academic = [];
+sports = [];
+seminar = [];
+others = [];
+cultural = [];
+others = [];
+
+for (let i = 0; i < inputData.events.length; i++) {
+  //  console.log(inputData.events[i]);
+
+  if (inputData.events[i].category === 'academic') {
+    academic.push(inputData.events[i]);
+  } else if (inputData.events[i].category === 'sports') {
+    sports.push(inputData.events[i]);
+  } else if (inputData.events[i].category === 'seminar') {
+    seminar.push(inputData.events[i]);
+  } else if (inputData.events[i].category === 'others') {
+    others.push(inputData.events[i]);
+  } else if (inputData.events[i].category === 'cultural') {
+    cultural.push(inputData.events[i]);
+  }
+}
+
 function compare(a, b) {
   if (a.eventStartTime < b.eventStartTime) {
     return -1;
@@ -131,7 +151,7 @@ function compare(a, b) {
   }
 
   if (a.eventStartTime == b.eventStartTime) {
-    if (a.totalDuration < b.totalDuration) {
+    if (a.duration < b.duration) {
       return -1;
     } else {
       return 1;
@@ -140,315 +160,45 @@ function compare(a, b) {
   return 0;
 }
 
-function processInput(inputData) {
-  let events = inputData.events;
-  for (let i = 0; i < events.length; i++) {
-    events[i]['totalDuration'] = events[i].duration + events[i].afterBreak;
-  }
+//   console.log(sports)
+
+academic.sort(compare);
+sports.sort(compare);
+seminar.sort(compare);
+others.sort(compare);
+cultural.sort(compare);
+
+combinedList = [];
+
+for (let i = 0; i < academic.length; i++) {
+  combinedList.push(academic[i]);
+}
+for (let i = 0; i < sports.length; i++) {
+  combinedList.push(sports[i]);
 }
 
-let schedule = CREATESCHEDULE(inputData);
-console.log(schedule);
-
-function CREATESCHEDULE(inputData) {
-  processInput(inputData);
-  // console.log(inputData);
-
-  // time calculation
-  dayStartTimeHour = parseInt(inputData.startTime.split(':')[0]);
-  dayEndTimeHour = parseInt(inputData.endTime.split(':')[0]);
-
-  dayStartTimeMin = parseInt(inputData.startTime.split(':')[1]);
-  dayEndTimeMin = parseInt(inputData.endTime.split(':')[1]);
-
-  totaHours = (dayEndTimeHour - dayStartTimeHour) * 60;
-  totalMin = dayEndTimeMin - dayStartTimeMin;
-  totalTime = totaHours + totalMin;
-
-  slots = totalTime / 5;
-
-  // creating slot array for indexing and mapping purpose
-  timeSlot = new Array(slots);
-  timeSlot[0] = inputData.startTime;
-
-  for (let i = 1; i < slots; i++) {
-    let hour = parseInt(timeSlot[i - 1].split(':')[0]);
-    let min = parseInt(timeSlot[i - 1].split(':')[1]);
-
-    min = min + 5;
-    if (min == 60) {
-      min = 0;
-      hour = hour + 1;
-    }
-    let minStr = '';
-    let hourStr = '';
-    if (min < 10) {
-      minStr = '0' + min.toString();
-    } else {
-      minStr = min.toString();
-    }
-    if (hour < 10) {
-      hourStr = '0' + hour.toString();
-    } else {
-      hourStr = hour.toString();
-    }
-    timeSlot[i] = hourStr + ':' + minStr;
-  }
-
-  // for (let i = 0; i < slots; i++) {
-  //   console.log(i + ' - ' + timeSlot[i]);
-  // }
-
-  academic = [];
-  sports = [];
-  seminar = [];
-  others = [];
-  cultural = [];
-
-  // separate events category wise
-  for (let i = 0; i < inputData.events.length; i++) {
-    if (inputData.events[i].category === 'academic')
-      academic.push(inputData.events[i]);
-    else if (inputData.events[i].category === 'sports')
-      sports.push(inputData.events[i]);
-    else if (inputData.events[i].category === 'seminar')
-      seminar.push(inputData.events[i]);
-    else if (inputData.events[i].category === 'others')
-      others.push(inputData.events[i]);
-    else if (inputData.events[i].category === 'cultural')
-      cultural.push(inputData.events[i]);
-  }
-
-  // sorting the events
-  academic.sort(compare);
-  sports.sort(compare);
-  seminar.sort(compare);
-  others.sort(compare);
-  cultural.sort(compare);
-
-  let finalSchedule = {
-    academic: [],
-    sports: [],
-    seminar: [],
-    others: [],
-    cultural: [],
-  };
-
-  // creating the schedule
-  if (academic.length > 0)
-    finalSchedule.academic = createEventSchedule(academic);
-  if (sports.length > 0) finalSchedule.sports = createEventSchedule(sports);
-  if (seminar.length > 0) finalSchedule.seminar = createEventSchedule(seminar);
-  if (others.length > 0) finalSchedule.others = createEventSchedule(others);
-  if (cultural.length > 0)
-    finalSchedule.cultural = createEventSchedule(cultural);
-
-  // console.log(finalSchedule);
-  return finalSchedule;
+for (let i = 0; i < seminar.length; i++) {
+  combinedList.push(seminar[i]);
 }
 
-// MAIN LOGIC FUNCTION
-function createEventSchedule(eventList) {
-  eventList.sort(compare);
-
-  // console.log(eventList);
-  let scheduleSlots = new Array(slots).fill(-1);
-
-  // lunch break
-  if (inputData.lunchBreak) {
-    let lunchStartIdx = timeSlot.indexOf(inputData.lunchStartime);
-    let lunchEndIdx = lunchStartIdx + inputData.durationOfLunchBreak / 5;
-    for (let i = lunchStartIdx; i < lunchEndIdx; i++) {
-      scheduleSlots[i] = 100;
-    }
-  }
-
-  // for (let i = 0; i < slots; i++) {
-  //   console.log(timeSlot[i] + ' : ' + scheduleSlots[i]);
-  // }
-
-  for (let i = 0; i < eventList.length; i++) {
-    let startIdx = timeSlot.indexOf(eventList[i].eventStartTime);
-    let occupyIdx = eventList[i].totalDuration / 5;
-    let endIdx = startIdx + occupyIdx;
-    // console.log('i :' + i);
-    if (startIdx != -1) {
-      // console.log('startIdx : ' + startIdx);
-      // console.log('endIdx : ' + endIdx);
-    }
-    // console.log('occupyIdx : ' + occupyIdx);
-    // console.log('starTime : ' + eventList[i].eventStartTime);
-    // console.log('duration : ' + eventList[i].duration);
-
-    if (startIdx == -1) {
-      // star Time is not mentioned
-      // check for empty slots
-      startIdx = scheduleSlots.indexOf(-1);
-      endIdx = startIdx + occupyIdx;
-
-      let emptySlot = scheduleSlots.slice(startIdx, endIdx);
-      let checkStartPos = endIdx;
-      while (!allEqual(emptySlot, -1)) {
-        startIdx = scheduleSlots.indexOf(-1, checkStartPos);
-        endIdx = startIdx + occupyIdx;
-        emptySlot = scheduleSlots.slice(startIdx, endIdx);
-        checkStartPos = endIdx;
-      }
-      // console.log('final start Idx : ' + startIdx);
-      // console.log('final end Idx : ' + endIdx);
-      for (let j = startIdx; j < endIdx; j++) {
-        scheduleSlots[j] = i;
-      }
-      // console.log('startIdx : ' + startIdx);
-      // console.log('endIdx : ' + endIdx);
-    } else {
-      // start Time is mentioned
-      let emptySlot = scheduleSlots.slice(startIdx, startIdx + occupyIdx);
-      let checkStartPos = endIdx;
-      while (!allEqual(emptySlot, -1)) {
-        startIdx = scheduleSlots.indexOf(-1, checkStartPos);
-        endIdx = startIdx + occupyIdx;
-        emptySlot = scheduleSlots.indexOf(startIdx, endIdx);
-      }
-      checkStartPos = endIdx;
-      // console.log('final start Idx : ' + startIdx);
-      // console.log('final end Idx : ' + endIdx);
-      for (let j = startIdx; j < startIdx + occupyIdx; j++) {
-        scheduleSlots[j] = i;
-      }
-    }
-  }
-
-  // for (let i = 0; i < slots; i++) {
-  //   console.log('i : ' + i + '|  ' + timeSlot[i] + ' : ' + scheduleSlots[i]);
-  // }
-
-  scheduleArr = [];
-  let idx = 0;
-  for (let i = 0; i < slots; i++) {
-    if (scheduleSlots[idx] != scheduleSlots[i]) {
-      arr = [];
-      arr.push(scheduleSlots[idx]);
-      arr.push(timeSlot[idx]);
-      arr.push(timeSlot[i]);
-      scheduleArr.push(arr);
-      idx = i;
-    }
-  }
-  // console.log(scheduleArr);
-  // console.log(scheduleArr.length);
-
-  let finalSchedule = [];
-  for (let i = 0; i < scheduleArr.length; i++) {
-    if (scheduleArr[i][0] == -1 || scheduleArr[i][0] == 100) continue;
-    let newSchedule = {};
-    newSchedule.startTime = scheduleArr[i][1];
-    newSchedule.endTime = scheduleArr[i][2];
-    newSchedule.description = eventList[scheduleArr[i][0]].description;
-    newSchedule.category = eventList[scheduleArr[i][0]].category;
-    newSchedule.duration = eventList[scheduleArr[i][0]].duration;
-    newSchedule.afterBreak = eventList[scheduleArr[i][0]].afterBreak;
-    newSchedule.totalDuration = eventList[scheduleArr[i][0]].totalDuration;
-    finalSchedule.push(newSchedule);
-  }
-
-  // console.log(finalSchedule);
-  return finalSchedule;
+for (let i = 0; i < others.length; i++) {
+  combinedList.push(others[i]);
 }
 
-// createschedule(academic);
-// createschedule(sports);
+for (let i = 0; i < cultural.length; i++) {
+  combinedList.push(cultural[i]);
+}
 
-// // building academic schedule
-// console.log(academic);
-// let academicSchedule = new Array(slots).fill(-1);
+combinedList.sort(compare);
 
-// // lunch break
-// if (inputData.lunchBreak) {
-//   let lunchStartIdx = timeSlot.indexOf(inputData.lunchStartime);
-//   let lunchEndIdx = lunchStartIdx + inputData.durationOfLunchBreak / 5;
-//   for (let i = lunchStartIdx; i < lunchEndIdx; i++) {
-//     academicSchedule[i] = 100;
-//   }
-// }
+combinedList.sort(compare);
+console.log(combinedList);
 
-// for (let i = 0; i < academic.length; i++) {
-//   let startIdx = timeSlot.indexOf(academic[i].eventStartTime);
-//   let occupyIdx = academic[i].duration / 5;
-//   let endIdx = startIdx + occupyIdx;
-//   console.log('i :' + i);
-//   console.log('startIdx : ' + startIdx);
-//   console.log('occupyIdx : ' + occupyIdx);
-//   console.log('endIdx : ' + endIdx);
-//   console.log('starTime : ' + academic[i].eventStartTime);
-//   console.log('duration : ' + academic[i].duration);
+console.log(academic);
+console.log(sports);
+console.log(seminar);
+console.log(others);
+console.log(cultural);
+console.log(others);
 
-//   if (startIdx == -1) {
-//     // star Time is not mentioned
-//     // check for empty slots
-//     startIdx = academicSchedule.indexOf(-1);
-//     let emptySlot = academicSchedule.slice(startIdx, endIdx);
-//     let checkStartPos = endIdx;
-//     while (!allEqual(emptySlot, -1)) {
-//       startIdx = academicSchedule.indexOf(-1, checkStartPos);
-//       endIdx = startIdx + occupyIdx;
-//       emptySlot = academicSchedule.slice(startIdx, endIdx);
-//     }
-//     console.log('final start Idx : ' + startIdx);
-//     console.log('final end Idx : ' + endIdx);
-//     for (let j = startIdx; j < endIdx; j++) {
-//       academicSchedule[j] = i;
-//     }
-//   } else {
-//     // start Time is mentioned
-//     let emptySlot = academicSchedule.slice(startIdx, startIdx + occupyIdx);
-//     let checkStartPos = endIdx;
-//     while (!allEqual(emptySlot, -1)) {
-//       startIdx = academicSchedule.indexOf(-1, checkStartPos);
-//       endIdx = startIdx + occupyIdx;
-//       emptySlot = academicSchedule.indexOf(startIdx, endIdx);
-//     }
-//     console.log('final start Idx : ' + startIdx);
-//     console.log('final end Idx : ' + endIdx);
-//     for (let j = startIdx; j < startIdx + occupyIdx; j++) {
-//       academicSchedule[j] = i;
-//     }
-//   }
-// }
-
-// for (let i = 0; i < slots; i++) {
-//   console.log('i : ' + i + '|  ' + timeSlot[i] + ' : ' + academicSchedule[i]);
-// }
-
-// academedicObj = [];
-// let idx = 0;
-// for (let i = 0; i < slots; i++) {
-//   if (academicSchedule[idx] != academicSchedule[i]) {
-//     arr = [];
-//     arr.push(academicSchedule[idx]);
-//     arr.push(timeSlot[idx]);
-//     arr.push(timeSlot[i]);
-//     academedicObj.push(arr);
-//     idx = i;
-//   }
-// }
-// console.log(academedicObj);
-// console.log(academedicObj.length);
-
-// let finalAcademicSchedule = [];
-// for (let i = 0; i < academedicObj.length; i++) {
-//   if (academedicObj[i][0] == -1 || academedicObj[i][0] == 100) continue;
-//   let newSchedule = {};
-//   newSchedule.startTime = academedicObj[i][1];
-//   newSchedule.endTime = academedicObj[i][2];
-//   // console.log(academic[academedicObj[i][0]]);
-//   // console.log(academedicObj[i][0]);
-//   newSchedule.description = academic[academedicObj[i][0]].description;
-//   newSchedule.category = academic[academedicObj[i][0]].category;
-//   newSchedule.duration = academic[academedicObj[i][0]].duration;
-//   finalAcademicSchedule.push(newSchedule);
-// }
-
-// console.log(finalAcademicSchedule);
-
-// functions
+let scheduleArray = new Array(slots);
